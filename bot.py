@@ -1,6 +1,6 @@
-from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 import os
+from telegram import Update
+from telegram.ext import Application, CommandHandler, ContextTypes
 
 banca = 0.0
 
@@ -15,7 +15,7 @@ async def inicio(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def definir_banca(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global banca
 
-    if len(context.args) == 0:
+    if not context.args:
         await update.message.reply_text("Use: /banca 100")
         return
 
@@ -28,12 +28,16 @@ async def definir_banca(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def saldo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(f"💰 Saldo atual: R${banca:.2f}")
 
-TOKEN = os.getenv("BOT_TOKEN")
+def main():
+    token = os.environ["BOT_TOKEN"]
 
-app = ApplicationBuilder().token(TOKEN).build()
+    app = Application.builder().token(token).build()
 
-app.add_handler(CommandHandler("inicio", inicio))
-app.add_handler(CommandHandler("banca", definir_banca))
-app.add_handler(CommandHandler("saldo", saldo))
+    app.add_handler(CommandHandler("inicio", inicio))
+    app.add_handler(CommandHandler("banca", definir_banca))
+    app.add_handler(CommandHandler("saldo", saldo))
 
-app.run_polling()
+    app.run_polling()
+
+if __name__ == "__main__":
+    main()
