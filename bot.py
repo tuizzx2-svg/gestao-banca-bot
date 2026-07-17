@@ -10,7 +10,7 @@ async def inicio(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "Comandos:\n"
         "/banca 100\n"
         "/saldo"
-    )
+    app.add_handler(CommandHandler("aposta", aposta)))
 
 async def definir_banca(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global banca
@@ -39,5 +39,22 @@ def main():
 
     app.run_polling()
 
-if __name__ == "__main__":
+async def aposta(update: Update, context):
+    if len(context.args) < 2:
+        await update.message.reply_text(
+            "Use:\n/aposta 2.50 4"
+        )
+        return
+
+    valor = float(context.args[0].replace(",", "."))
+    odd = float(context.args[1].replace(",", "."))
+
+    lucro = valor * (odd - 1)
+
+    await update.message.reply_text(
+        f"💸 Valor: R${valor:.2f}\n"
+        f"🎯 Odd: {odd}\n"
+        f"🏆 Lucro: R${lucro:.2f}\n"
+        f"💰 Retorno: R${valor + lucro:.2f}"
+    )if __name__ == "__main__":
     main()
