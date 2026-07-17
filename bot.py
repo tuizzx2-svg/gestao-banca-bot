@@ -58,3 +58,4 @@ async def aposta(update: Update, context):
         f"💰 Retorno: R${valor + lucro:.2f}"
     )if __name__ == "__main__":
     main()
+    app.add_handler(CommandHandler("aposta", aposta))
